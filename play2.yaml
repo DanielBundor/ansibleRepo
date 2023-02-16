@@ -1,0 +1,42 @@
+---
+  - name: "Playing with Ansible and Git"
+    hosts: localhost
+    connection: local
+    tasks:
+    - name: "gather facts"
+      debug:
+        var: ansible_facts
+    - name: "display facts"
+      debug:
+        msg: Ansible facts are  {{ ansible_facts }}
+    - name: "just execute a ls -lrt command"
+      shell: "ls -lrt"
+      register: "output"
+    - debug: var=output
+    - name: "Do not count this as a failure"
+      command: /bin/true
+      ignore_errors: false
+    - name: Copy file with owner and permissions
+      become: yes
+      copy:
+        src: ./file.txt
+        dest: /tmp
+        owner: root
+        group: root
+        mode: '0644'
+      when: output.rc == 0
+    - name: Copy file with owner and permissions
+      become_user: ec2-user
+      copy:
+        src: ./file2.txt
+        dest: /tmp
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+    - name: Validate if the file is present
+      shell: ls -lrt /tmp/myprocess.pid
+      register: lsresult
+      until: "lsresult is not failed"
+      retries: 5
+      delay: 1
+

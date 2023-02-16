@@ -1,0 +1,25 @@
+---
+  - name: "Playing with Ansible and Git"
+    hosts: localhost
+    connection: local
+    tasks:
+    - name: "just execute a ls -lrt command"
+      shell: "ls -lrt"
+      register: "output"
+    - debug: var=output.stdout_lines
+    - name: Copy file with owner and permissions
+      become: yes
+      copy:
+        src: ./file.txt
+        dest: /tmp
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Copy file with owner and permissions
+      become_user: ec2-user
+      copy:
+        src: ./file2.txt
+        dest: /tmp
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
