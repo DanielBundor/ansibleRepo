@@ -4,4 +4,4 @@
 
 # Furthermore, as I continue to practice, I will develop new ideas and scalable solutions on how to improve my work.
 
-#Thanks for stoping by. 
+# Thanks for stoping by. 
